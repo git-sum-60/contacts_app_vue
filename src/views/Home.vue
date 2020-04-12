@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <h1>{{ message }}</h1>
+    <h1>{{ errors }}</h1>
+    <ul>
+      <li v-for="error in errors">{{ error }}</li>
+    </ul>
     first name: <input type="text" v-model="newContact.firstName">
     last name: <input type="text" v-model="newContact.lastName">
     email: <input type="text" v-model="newContact.email">
@@ -44,7 +48,8 @@ export default {
         lastName: "",
         email: "",
         phoneNumber: ""        
-      }
+      },
+      errors: []
     };
   },
   created: function() {
@@ -70,7 +75,10 @@ export default {
       axios.post('/api/contacts', params).then(response => {
         console.log(response.data);
         this.contacts.push(response.data)
-      })
+      }).catch(error => {
+        console.log(error.response.data.errors);
+        this.errors = error.response.data.errors;
+      });
     },
     updateContact: function(theContact) {
       console.log('updating the contact....')
