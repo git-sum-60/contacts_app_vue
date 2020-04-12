@@ -13,7 +13,15 @@
       <p>first_name: {{ contact.first_name }}</p>
       <p>last_name: {{ contact.last_name }}</p>
       <p>email: {{ contact.email }}</p>
-      <p>phone_number: {{ contact.phone }}</p>
+      <p>phone_number: {{ contact.phone_number }}</p>
+      <hr>
+      <hr>
+      first name: <input type="text" v-model="contact.first_name">
+      last name: <input type="text" v-model="contact.last_name">
+      email: <input type="text" v-model="contact.email">
+      phoneNumber: <input type="text" v-model="contact.phone_number">
+      address: <input type="text" v-model="contact.address">
+      <button v-on:click="updateContact(contact)">Update Contact</button>
       <hr>
       <hr>
     </div>
@@ -61,6 +69,21 @@ export default {
 
       axios.post('/api/contacts', params).then(response => {
         console.log(response.data);
+      })
+    },
+    updateContact: function(theContact) {
+      console.log('updating the contact....')
+      console.log(theContact);
+      // collect all the data (params)
+      var params = {
+        first_name: theContact.first_name,
+        last_name: theContact.last_name,
+        email: theContact.email,
+        phone_number: theContact.phone_number,
+      }
+      // send that data to rails
+      axios.patch('/api/contacts/' + theContact.id, params).then(response => {
+        console.log(response)
       })
     }
   }
